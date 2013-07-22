@@ -4,7 +4,7 @@ import re
 # Constants and global values
 """
 The name of the application.
-
+"""
 APPLICATION_NAME = "Netbasm";
 """
 The version of the application.

@@ -9,7 +9,7 @@ from Crypto import Random
 import time
 import nbutils
 import re
-import cPickle as pickle
+import pyzerial
 import base64
 
 # <=== MAIN USER VARIABLES ===>
@@ -72,7 +72,7 @@ class UserObject( object ):
     if fdata[:9] != "@NETBASM\n":
       return None;
     fdata = fdata[9:]; # fdata is now an array of key/values
-    robj = this( **pickle.loads( fdata ) ); # Make a new UserObject
+    robj = this( **pyzerial.load( fdata ) ); # Make a new UserObject
     robj._unsaved = False;
     robj._path = fname;
     return robj;
@@ -169,7 +169,7 @@ class UserObject( object ):
     if fdata[:9] != "@NETBASM\n":
       raise IOError( "Invalid decryption key for file '%s'!" % ( fpath ) );
     fdata = fdata[9:]; # fdata is now an array of key/values
-    self._internal = pickle.loads( fdata );
+    self._internal = pyzerial.load( fdata );
     self._unsaved = False;
 
   def save( self , fname=None ):
@@ -192,7 +192,7 @@ class UserObject( object ):
     with open( fpath , "wb" ) as f:
       cipher , iv = newCipher();
       f.write( iv );
-      fdata = "@NETBASM\n" + pickle.dumps( self._internal );
+      fdata = "@NETBASM\n" + pyzerial.save( self._internal );
       f.write( cipher.encrypt( fdata ) );
     self._unsaved = False;
 

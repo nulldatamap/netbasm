@@ -197,8 +197,7 @@ class UserObject( object ):
     self._unsaved = False;
 
   def __repr__( self ):
-    return "<UserObject '%s' %s>" % ( self._path or "" ,
-                                      str( self._internal ) );
+    return "<UserObject '%s'>" % ( self._path or "" );
 
 
 # user functions
@@ -279,6 +278,23 @@ def loginTo( user , session ):
     print "Logged into "+user;
     userObject["lastLogin"] = int( time.time() );
     loadCertificate();
+    if not userObject.has_key( "knownNodes" ):
+      userObject["knownNodes"] = [];
+    if len( userObject["knownNodes"] ) == 0:
+      print "You don't have any known nodes to connect to."
+      print "Without any entry nodes, you can't join a network."
+      print "Do you want to add a node now ( IP address )?",
+      while nbutils.yesOrNo():
+        print "Please enter the address of a new node.";
+        naddr = raw_input().strip();
+        if not nbutils.validateIP( naddr ):
+          print "Invalid IP!\nDo you want to try again?",
+          continue;
+        if userObject["knownNodes"].count( naddr ) > 0: # it contains it already
+          print "IP already registered!\nDo you want to try again?",
+          continue;
+        userObject["knownNodes"].append( naddr );
+        print "'%s' added.\nDo you want to add any other nodes?" % ( naddr ) ,;
   else:
     print "Failed login!";
     sessionHash = None;
@@ -300,8 +316,8 @@ this can lead to massive security and identity problems. And should be avoided
 doesn't matter what."""
     userCertificate = RSA.generate( 4096 );
     pubkey = userCertificate.publickey();
-    userObject["certificate"] = { "private" : userCertificate.exportKey() ,
-                                  "public" : pubkey.exportKey() };
+    userObject["certificate"] = { "private" : userCertificate.exportKey( 'DER' ) ,
+                                  "public" : pubkey.exportKey( 'DER' ) };
     userObject.save( ".user" );
     print "The key was generated and stored."
 

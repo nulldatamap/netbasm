@@ -37,4 +37,16 @@ def validateKey( key ):
   mtch = ptrn.match( key );
   return mtch and ( mtch.group(0) == key );
 
-
+def validateIP( ip ):
+  """
+  Checks if the given IP address is valid.
+  """
+  ptrn = re.compile( r"[0-2]?[0-9]{1,2}\.[0-2]?[0-9]{1,2}\.[0-2]?[0-9]{1,2}\.[0-2]?[0-9]{1,2}" );
+  mtch = ptrn.match( ip );
+  if not mtch or ( mtch.group(0) != ip ):
+    return False;
+  values = mtch.group(0).split( "." );
+  for i in values:
+    if int(i)>255:
+      return False;
+  return True;

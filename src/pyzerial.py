@@ -6,6 +6,7 @@ def save( obj ):
   """
   Save a Python object to a string.
   Classes, instances, modules and functions are not allowed.
+  MUST BE SAVED IN BINARY MODE.
 
   obj -- The object to save.
   """
@@ -41,7 +42,14 @@ def save( obj ):
     raise ValueError( "Unserializable object '%s'!" % ( str( obj ) ) );
   return out;
 
-def loads( data ):
+def loads( data ): # This is for embedded use, since it only loads 1 object.
+  """
+  Loads a Python object from a string.
+  Returns both the loaded object, and the size of the read string.
+  MUST BE LOADED IN BINARY MODE.
+
+  data -- The string to load from.
+  """
   offset = 1;
   out = None;
   if data[0] == 'd':
@@ -76,4 +84,11 @@ def loads( data ):
     raise ValueError( "Invalid pyzerial format!" );
 
 def load( data ):
+  """
+  Loads a Python object from a string.
+  Returns the loaded object.
+  MUST BE LOADED IN BINARY MODE.
+
+  data -- The string to load from.
+  """
   return loads( data )[0]; # Discard the length value

@@ -1,0 +1,14 @@
+-> "@NETBASM\n"
+if not r.know l
+	<- { type: "request" , value: "pubkey" }
+	-> { type: "delivery" , value: l.pubkey }
+<- { type: "sign" , value: pubkey }
+-> sign( l.pubkey ) # Prove that you are who you say you are
+<- new session ->
+	=> { type: "ping" , time: time() , uid: UID() }
+	<= { type: "pong" , time: time() , uid: ping.uid }
+	=> { type: "statusevent" , status: "online" , time= time() }
+	=> { type: "chatevent" , eventType: "messageReceived" , message: "Hello world!" , messageTime = time() , messageUID = UID() }
+	<= { type: "chatevent" , eventType: "messageGotten" , messageUID = message.uid , time = time() }
+<- end session ->
+

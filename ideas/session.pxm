@@ -1,0 +1,13 @@
+<- end session ->:
+	-> { type: "newsession" , key: RSAEncrypt( aesKey ) , iv: RSAEncrypt( aesIv ) , confirm: AESEncrypt( randomMessage() ) }
+	<- { type: "sessionconfirm" , confirm: AESDecrypt( msg ) }
+	if confirmMessage == recievedMessage:
+		-> { type: "sessionconfirmed" }
+	else:
+		-> { type: "sessionfailed" }
+		# end session
+	# => means send encrypted
+
+<- end session ->:
+	=> { type: "endsession" }
+	<- { type: "sessionended" }

@@ -1,0 +1,11 @@
+ops:
+	0x00 : DATA
+	0x01 : CONF
+	0x02 : AK
+	0x03 : NAK
+	0x04 : DONE
+DATA | short id | byte check | bytes data
+CONF
+AK
+NAK | shorts ids
+DONE

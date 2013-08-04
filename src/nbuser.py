@@ -280,6 +280,8 @@ def loginTo( user , session ):
     loadCertificate();
     if not userObject.has_key( "knownNodes" ):
       userObject["knownNodes"] = [];
+    if not userObject.has_key( "serverPort" ):
+      userObject["serverPort"] = 2013;
     if len( userObject["knownNodes"] ) == 0:
       print "You don't have any known nodes to connect to."
       print "Without any entry nodes, you can't join a network."
@@ -291,7 +293,7 @@ def loginTo( user , session ):
           print "Invalid IP!\nDo you want to try again?",
           continue;
         if userObject["knownNodes"].count( naddr ) > 0: # it contains it already
-          print "IP already registered!\nDo you want to try again?",
+          print "IP already registered!\nDo you want to try again?",;
           continue;
         userObject["knownNodes"].append( naddr );
         print "'%s' added.\nDo you want to add any other nodes?" % ( naddr ) ,;
